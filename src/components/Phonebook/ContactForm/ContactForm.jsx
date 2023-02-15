@@ -1,41 +1,19 @@
-import { Component } from 'react';
+
 import PropTypes from 'prop-types';
+import useForm from 'components/shared/hooks/useForm';
 
 import initialState from './initialState';
 import styles from './contactForm.module.css';
 
 
-class ContactForm extends Component {
-  state = {
-    ...initialState,
-  };
+const ContactForm = ({ onSubmit }) => {
+    const { state, handleChange, handleSubmit } = useForm({
+    initialState,
+    onSubmit,
+    });
   
-    
-  handleInputChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    });
-  };
-  handleSubmit = event => {
-    event.preventDefault();
-    const { onSubmit } = this.props;
-     const result = onSubmit({ ...this.state });
-    if (result) {
-      this.reset();
-    }
-  };
-  reset() {
-    this.setState({
-      ...initialState,
-    });
-    }
-    
-
-  render() {
-    const { handleInputChange, handleSubmit } = this;
-    const { name, number } = this.state;
-    return (
+    const { name, number } = state;
+  return (
       <div className={styles.wrapper}>
         <div className={styles.contactFormBlock}>
           <form className="" onSubmit={handleSubmit}>
@@ -52,11 +30,10 @@ class ContactForm extends Component {
                 pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
                 title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                 required
-                id={this.nameInputId}
-              />
-            </div>
-            <div className={styles.conactFormGroup}>
-              <label className={styles.label} htmlFor={this.numberInputId}>
+            />
+          </div>
+           <div className={styles.conactFormGroup}>
+              <label className={styles.label}>
                 Number
               </label>
               <input
@@ -68,17 +45,18 @@ class ContactForm extends Component {
                 pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                 title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                 required
-                id={this.numberInputId}
-              />
-            </div>
-            <button className={styles.btnAddContact} type="submit">
-              Add contact
-            </button>
-          </form>
-        </div>
+
+            />
+          </div>
+          <button className={styles.btnAddContact} type="submit">
+            Add contact
+          </button>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
+  
+
 }
 export default ContactForm;
 
